@@ -1,6 +1,9 @@
-SMTP2HTTP (email-to-web)
+smtp-hook
 ========================
-smtp2http is a simple smtp server that resends the incoming email to the configured web endpoint (webhook) as a basic http post request.
+SMTP server to webhook.
+
+Modified docker wrapper for [@alash3al/smtp2http](https://github.com/alash3al/smtp2http) that
+adds support for environment variables.
 
 Dev 
 ===
@@ -10,37 +13,26 @@ Dev
 Dev with Docker
 ==============
 Locally :
-- `go mod vendor`
-- `docker build -f Dockerfile.dev -t smtp2http-dev .`
-- `docker run -p 25:25 smtp2http-dev --timeout.read=50 --timeout.write=50 --webhook=http://some.hook/api`
-
-Or build it as it comes from the repo :
 - `docker build -t smtp2http .`
-- `docker run -p 25:25 smtp2http --timeout.read=50 --timeout.write=50 --webhook=http://some.hook/api`
+- `docker run -p 25:30025 smtp2http --timeout.read=50 --timeout.write=50 --webhook=http://some.hook/api`
 
-The `timeout` options are of course optional but make it easier to test in local with `telnet localhost 25`
+The `timeout` options are of course optional but make it easier to test in local with `telnet localhost 30025`
 Here is a telnet example payload : 
 ```
 HELO zeus
-# smtp answer
-
 MAIL FROM:<email@from.com>
-# smtp answer
-
 RCPT TO:<youremail@example.com>
-# smtp answer
-
 DATA
-your mail content
+Subject: Test message
+
+your mail content.
 .
 
 ```
 
 Docker (production)
 =====
-**Docker images arn't available online for now**
-**See "Dev with Docker" above**
-- `docker run -p 25:25 smtp2http --webhook=http://some.hook/api`
+- `docker run -e WEBHOOK="http://some.hook/api" -p 25:30025 ghcr.io/cjmalloy/smtp-hook:v1.0.0`
 
 Native usage
 =====
@@ -49,7 +41,4 @@ Native usage
 
 Contribution
 ============
-Original repo from @alash3al
-Thanks to @aranajuan
-
-
+Forked from repo @alash3al/smtp2http
