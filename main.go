@@ -88,8 +88,10 @@ func main() {
 			req := resty.New().R()
 			req.SetHeader("Content-Type", "application/json")
 			for _, h := range strings.Split(*headers, ",") {
-				parts := strings.Split(h, ":")
-				req.SetHeader(parts[0], parts[1])
+				if h != "" {
+					parts := strings.Split(h, ":")
+					req.SetHeader(parts[0], parts[1])
+				}
 			}
 			resp, err := req.SetBody(jsonData).Post(*flagWebhook)
 			if err != nil {
