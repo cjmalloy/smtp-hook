@@ -85,7 +85,13 @@ func main() {
 				})
 			}
 
-			resp, err := resty.New().R().SetHeader("Content-Type", "application/json").SetBody(jsonData).Post(*flagWebhook)
+			req := resty.New().R()
+			req.SetHeader("Content-Type", "application/json")
+			for _, h := range strings.Split(*headers, ",") {
+				parts := strings.Split(h, ":")
+				req.SetHeader(parts[0], parts[1])
+			}
+			resp, err := req.SetBody(jsonData).Post(*flagWebhook)
 			if err != nil {
 				log.Println(err)
 				return errors.New("E1: Cannot accept your message due to internal error, please report that to our engineers")

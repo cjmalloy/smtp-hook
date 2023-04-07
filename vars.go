@@ -8,6 +8,7 @@ import (
 
 var (
 	flagServerName     = flag.String("name", getEnvString("NAME", "smtp2http"), "the server name")
+	headers            = flag.String("headers", getEnvString("HEADERS", ""), "comma separated headers (Header:value,Other-Header:value)")
 	flagListenAddr     = flag.String("listen", getEnvString("LISTEN", ":smtp"), "the smtp address to listen on")
 	flagWebhook        = flag.String("webhook", getEnvString("WEBHOOK", "http://localhost:8080/my/webhook"), "the webhook to send the data to")
 	flagMaxMessageSize = flag.Int64("msglimit", getEnvInt64("MSGLIMIT", 1024*1024*2), "maximum incoming message size")
